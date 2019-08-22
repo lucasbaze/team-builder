@@ -1,16 +1,16 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Button } from 'semantic-ui-react';
 
-const TeamForm = ({ newTeamData, handleChange, handleSubmit }) => {
+const TeamForm = ({ currentMember, handleChange, handleSubmit, clearForm }) => {
     return (
-        <Form size="large" onSubmit={() => handleSubmit()}>
+        <Form size="large" onSubmit={member => handleSubmit(member)}>
             <Form.Group widths="equal">
                 <Form.Input
                     fluid
                     name="first_name"
                     label="First Name"
                     placeholder="First Name"
-                    value={newTeamData.first_name}
+                    value={currentMember.first_name}
                     onChange={e => handleChange(e)}
                 />
 
@@ -19,7 +19,7 @@ const TeamForm = ({ newTeamData, handleChange, handleSubmit }) => {
                     name="last_name"
                     label="Last Name"
                     placeholder="Last Name"
-                    value={newTeamData.last_name}
+                    value={currentMember.last_name}
                     onChange={e => handleChange(e)}
                 />
             </Form.Group>
@@ -28,10 +28,12 @@ const TeamForm = ({ newTeamData, handleChange, handleSubmit }) => {
                 name="email"
                 label="Email"
                 placeholder="email"
-                value={newTeamData.email}
+                value={currentMember.email}
                 onChange={e => handleChange(e)}
             />
+
             <Button type="submit">Submit</Button>
+            {/*<Button onClick={() => clearForm()}>Clear Form</Button>*/}
         </Form>
     );
 };

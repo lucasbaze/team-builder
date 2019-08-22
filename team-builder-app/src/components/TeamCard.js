@@ -1,8 +1,8 @@
 import React from 'react';
-import { Card, Header } from 'semantic-ui-react';
+import { Card, Button } from 'semantic-ui-react';
 import styled from 'styled-components';
 
-const TeamCard = ({ teamMember }) => {
+const TeamCard = ({ teamMember, selectMemberToEdit }) => {
     return (
         <Card>
             <Card.Content>
@@ -10,6 +10,9 @@ const TeamCard = ({ teamMember }) => {
                 <Card.Meta>{teamMember.last_name}</Card.Meta>
                 <Card.Description>{teamMember.email}</Card.Description>
             </Card.Content>
+            <Button onClick={() => selectMemberToEdit(teamMember.id)}>
+                Edit
+            </Button>
         </Card>
     );
 };

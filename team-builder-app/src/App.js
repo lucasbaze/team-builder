@@ -7,7 +7,8 @@ import TeamForm from './components/Form.js';
 
 const App = () => {
     const [teamData, setTeamData] = useState([]);
-    const [newTeamData, setNewTeamData] = useState({
+    const [currentMember, setCurrentMember] = useState({
+        id: 0,
         first_name: '',
         last_name: '',
         email: '',
@@ -25,6 +26,7 @@ const App = () => {
                 return response.json();
             })
             .then(data => {
+                console.log(data);
                 setTeamData(data);
             })
             .catch(err => {
@@ -33,21 +35,46 @@ const App = () => {
     }, []);
 
     const handleChange = event => {
-        console.log(newTeamData);
-        setNewTeamData({
-            ...newTeamData,
+        console.log(currentMember);
+        setCurrentMember({
+            ...currentMember,
             [event.target.name]: event.target.value,
         });
     };
 
-    const handleSubmit = () => {
-        console.log(teamData);
-        setTeamData([newTeamData, ...teamData]);
-        setNewTeamData({
+    const clearForm = () => {
+        setCurrentMember({
             first_name: '',
             last_name: '',
             email: '',
         });
+    };
+
+    const handleSubmit = () => {
+        if (currentMember.id === 0) {
+            setTeamData([currentMember, ...teamData]);
+        }
+        if (currentMember.id !== 0) {
+            let index = teamData.findIndex(member => {
+                return member.id === currentMember.id;
+            });
+
+            teamData[index] = currentMember;
+
+            setTeamData([...teamData]);
+        }
+
+        setCurrentMember({
+            id: 0,
+            first_name: '',
+            last_name: '',
+            email: '',
+        });
+    };
+
+    const selectMemberToEdit = memberID => {
+        let [editMember] = teamData.filter(member => member.id === memberID);
+        setCurrentMember(editMember);
     };
 
     return (
@@ -55,15 +82,21 @@ const App = () => {
             <Header as="h1">My Super Team</Header>
             <div style={{ width: 500 }}>
                 <TeamForm
-                    newTeamData={newTeamData}
+                    currentMember={currentMember}
                     handleChange={handleChange}
                     handleSubmit={handleSubmit}
+                    clearForm={clearForm}
                 />
             </div>
             <div style={{ marginTop: 100 }}>
                 <Card.Group centered>
                     {teamData.map(teamMember => {
-                        return <TeamCard teamMember={teamMember} />;
+                        return (
+                            <TeamCard
+                                teamMember={teamMember}
+                                selectMemberToEdit={selectMemberToEdit}
+                            />
+                        );
                     })}
                 </Card.Group>
             </div>
